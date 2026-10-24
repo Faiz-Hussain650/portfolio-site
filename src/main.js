@@ -49,6 +49,10 @@ const ICONS = {
 const icon = (name, cls = 'i') =>
   `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ''}</svg>`;
 
+// Responsive portrait: the browser picks the smallest file that is sharp enough.
+const PORTRAIT_SIZES = '(min-width: 1000px) 420px, (min-width: 600px) 60vw, 88vw';
+const srcset = (ext) => [480, 800, 1200].map((w) => `/img/faiz-${w}.${ext} ${w}w`).join(', ');
+
 const tags = (list = []) => `<ul class="tags">${list.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`;
 
 /* ---------- state ---------- */
@@ -82,15 +86,24 @@ function heroTpl(t) {
         </div>
       </div>
 
-      <figure class="term reveal" aria-label="Animated example of an ML deployment pipeline">
-        <div class="term__bar">
-          <span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="term__title">${esc(h.terminalTitle)}</span>
+      <figure class="portrait-wrap reveal">
+        <div class="portrait">
+          <picture>
+            <source type="image/avif" srcset="${srcset('avif')}" sizes="${PORTRAIT_SIZES}" />
+            <source type="image/webp" srcset="${srcset('webp')}" sizes="${PORTRAIT_SIZES}" />
+            <img src="/img/faiz-800.jpg" srcset="${srcset('jpg')}" sizes="${PORTRAIT_SIZES}"
+                 width="800" height="1000" alt="${esc(h.portraitAlt)}" fetchpriority="high" decoding="async" />
+          </picture>
+          <span class="portrait__scan" aria-hidden="true"></span>
+          <span class="corner corner--tl" aria-hidden="true"></span>
+          <span class="corner corner--tr" aria-hidden="true"></span>
+          <span class="corner corner--bl" aria-hidden="true"></span>
+          <span class="corner corner--br" aria-hidden="true"></span>
         </div>
-        <ol class="stages" id="stages">
-          ${h.stages.map((s) => `<li>${esc(s)}</li>`).join('')}
-        </ol>
-        <pre class="term__body" id="term-body" aria-hidden="true"></pre>
+        <figcaption class="portrait__cap">
+          <span>${esc(h.portraitCaption)}</span>
+          <span class="portrait__badge"><i aria-hidden="true"></i>${esc(h.portraitBadge)}</span>
+        </figcaption>
       </figure>
     </div>
 
@@ -108,6 +121,7 @@ function heroTpl(t) {
 
 function aboutTpl(t) {
   const a = t.about;
+  const h = t.hero;
   return `
   <section class="section" id="about" aria-labelledby="about-title">
     <div class="container">
@@ -116,9 +130,21 @@ function aboutTpl(t) {
         <div class="about__body reveal">
           ${a.body.map((p) => `<p>${esc(p)}</p>`).join('')}
         </div>
-        <dl class="facts reveal">
-          ${a.facts.map((f) => `<div class="fact"><dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd></div>`).join('')}
-        </dl>
+        <div class="about__side">
+          <figure class="term reveal" aria-label="Animated example of an ML deployment pipeline">
+            <div class="term__bar">
+              <span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="term__title">${esc(h.terminalTitle)}</span>
+            </div>
+            <ol class="stages" id="stages">
+              ${h.stages.map((s) => `<li>${esc(s)}</li>`).join('')}
+            </ol>
+            <pre class="term__body" id="term-body" aria-hidden="true"></pre>
+          </figure>
+          <dl class="facts reveal">
+            ${a.facts.map((f) => `<div class="fact"><dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd></div>`).join('')}
+          </dl>
+        </div>
       </div>
     </div>
   </section>`;

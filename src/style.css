@@ -408,8 +408,87 @@ img, svg { display: block; }
   align-items: center;
 }
 @media (min-width: 1000px) {
-  .hero__inner { grid-template-columns: 1.1fr 0.9fr; }
+  .hero__inner { grid-template-columns: 1.15fr 0.85fr; }
 }
+
+/* Portrait card (hero, right column) */
+.portrait-wrap {
+  width: 100%;
+  max-width: 420px;
+  justify-self: center;
+}
+@media (min-width: 1000px) { .portrait-wrap { justify-self: end; } }
+
+.portrait {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-hi);
+  background: var(--card);
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.6);
+}
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  filter: grayscale(1) contrast(1.08);
+  transform: scale(1.01);
+  transition: filter 0.6s var(--ease), transform 0.8s var(--ease);
+}
+.portrait:hover img { filter: grayscale(0) contrast(1.02); transform: scale(1.035); }
+
+/* soft fade at the bottom so the card blends into the page */
+.portrait::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 28%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.45));
+  pointer-events: none;
+}
+
+/* one thin line sweeping down, like a scanner */
+.portrait__scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.55;
+  box-shadow: 0 0 18px 2px var(--glow);
+  animation: scan 5.5s var(--ease) infinite;
+  z-index: 2;
+}
+
+.corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 0 solid rgba(255, 255, 255, 0.75);
+  z-index: 2;
+}
+.corner--tl { top: 12px; left: 12px; border-top-width: 1.5px; border-left-width: 1.5px; }
+.corner--tr { top: 12px; right: 12px; border-top-width: 1.5px; border-right-width: 1.5px; }
+.corner--bl { bottom: 12px; left: 12px; border-bottom-width: 1.5px; border-left-width: 1.5px; }
+.corner--br { bottom: 12px; right: 12px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+
+.portrait__cap {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.portrait__badge { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); white-space: nowrap; }
+.portrait__badge i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); animation: ping 2.2s infinite; }
 
 .status {
   display: inline-flex;
@@ -585,8 +664,11 @@ img, svg { display: block; }
 }
 .fact dd { font-weight: 500; }
 
+.about__side { display: grid; gap: 16px; align-self: start; min-width: 0; }
+.about__side .term__body { min-height: 236px; }
+
 @media (min-width: 900px) {
-  .about { grid-template-columns: 1.5fr 1fr; gap: 64px; }
+  .about { grid-template-columns: 1.2fr 1fr; gap: 56px; }
 }
 
 /* ---------- 6b. Skills (bento) ---------- */
@@ -806,6 +888,10 @@ img, svg { display: block; }
 .reveal.is-in { opacity: 1; transform: none; }
 
 @keyframes blink { 50% { opacity: 0; } }
+@keyframes scan {
+  0% { top: -10%; }
+  60%, 100% { top: 110%; }
+}
 @keyframes ping {
   0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 55%, transparent); }
   70%, 100% { box-shadow: 0 0 0 9px transparent; }
