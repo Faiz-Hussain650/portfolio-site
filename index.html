@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary meta. Replace the domain everywhere once your custom domain is live. -->
+    <title>Faiz Hussain · MLOps &amp; DevOps Engineer</title>
+    <meta name="description" content="MLOps and DevOps engineer in Milan. Terraform, Kubernetes, CI/CD and ML pipelines on AWS. 2+ years at NTT DATA, MSc Data Science, 3× AWS certified." />
+    <meta name="author" content="Faiz Hussain" />
+    <meta name="theme-color" content="#0a0b0d" />
+    <link rel="canonical" href="https://faiz-hussain.vercel.app/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph / LinkedIn / WhatsApp preview -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://faiz-hussain.vercel.app/" />
+    <meta property="og:title" content="Faiz Hussain · MLOps & DevOps Engineer" />
+    <meta property="og:description" content="I build the infrastructure that takes ML models to production and keeps them running on AWS." />
+    <meta property="og:image" content="https://faiz-hussain.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Structured data so search engines understand who this page is about -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Faiz Hussain",
+        "jobTitle": "MLOps & DevOps Engineer",
+        "address": { "@type": "PostalAddress", "addressLocality": "Milan", "addressCountry": "IT" },
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "University of Naples Federico II" },
+          { "@type": "CollegeOrUniversity", "name": "Dayananda Sagar University" }
+        ],
+        "knowsAbout": ["MLOps", "DevOps", "AWS", "Terraform", "Kubernetes", "MLflow", "CI/CD"],
+        "url": "https://faiz-hussain.vercel.app/",
+        "sameAs": [
+          "https://github.com/Faiz-Hussain650",
+          "https://www.linkedin.com/in/faiz-hussain"
+        ]
+      }
+    </script>
+
+    <!-- Apply saved theme before first paint to avoid a flash -->
+    <script>
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="nav" id="nav">
+      <div class="nav__inner">
+        <a href="#top" class="nav__logo" aria-label="Faiz Hussain, back to top">FH</a>
+        <nav class="nav__links" id="nav-links" aria-label="Sections"></nav>
+        <div class="nav__actions">
+          <div class="seg" role="group" aria-label="Language">
+            <button type="button" class="seg__btn" data-lang="it">IT</button>
+            <button type="button" class="seg__btn" data-lang="en">EN</button>
+          </div>
+          <button type="button" class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme"></button>
+          <button type="button" class="icon-btn nav__burger" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <span></span><span></span>
+          </button>
+        </div>
+      </div>
+      <div class="mobile-menu" id="mobile-menu" hidden></div>
+    </header>
+
+    <main id="main">
+      <noscript>
+        <p style="padding:2rem">Faiz Hussain, MLOps &amp; DevOps Engineer. Email: faizarfahussain@gmail.com · github.com/Faiz-Hussain650</p>
+      </noscript>
+      <div id="app"></div>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
