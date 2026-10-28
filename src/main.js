@@ -35,6 +35,8 @@ const ICONS = {
   box: '<path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/>',
   git: '<path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
   activity: '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+  spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="m6.3 6.3 2.1 2.1M15.6 15.6l2.1 2.1M6.3 17.7l2.1-2.1M15.6 8.4l2.1-2.1"/><circle cx="12" cy="12" r="2"/>',
+  phone: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/>',
   code: '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
   arrow: '<path d="M7 17 17 7"/><path d="M7 7h10v10"/>',
   down: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
@@ -176,10 +178,14 @@ function projectsTpl(t) {
   let n = 0;
   const num = () => `P—${String(++n).padStart(2, '0')}`;
 
-  const linkHtml = (x) =>
-    x.repo
-      ? `<a class="link" href="${x.repo}" target="_blank" rel="noopener noreferrer">${esc(p.repoLabel)} ${icon('arrow')}</a>`
-      : `<a class="link link--muted" href="mailto:${links.email}?subject=${encodeURIComponent(x.title)}">${esc(p.noRepoLabel)} ${icon('mail')}</a>`;
+  // Live demo link (if any) + code link, or a "walkthrough on request" mailto.
+  const linkHtml = (x) => {
+    const out = [];
+    if (x.live) out.push(`<a class="link" href="${x.live}" target="_blank" rel="noopener noreferrer">${esc(p.liveLabel)} ${icon('arrow')}</a>`);
+    if (x.repo) out.push(`<a class="link" href="${x.repo}" target="_blank" rel="noopener noreferrer">${esc(p.repoLabel)} ${icon('arrow')}</a>`);
+    if (!out.length) out.push(`<a class="link link--muted" href="mailto:${links.email}?subject=${encodeURIComponent(x.title)}">${esc(p.noRepoLabel)} ${icon('mail')}</a>`);
+    return `<span class="links">${out.join('')}</span>`;
+  };
 
   const metrics = (list) => `
     <dl class="metrics">
@@ -291,6 +297,7 @@ function contactTpl(t) {
         </div>
 
         <ul class="socials">
+          ${links.phone ? `<li><a href="tel:${links.phone.replace(/\s/g, '')}" aria-label="${esc(c.phoneLabel)} ${esc(links.phone)}">${icon('phone')} ${esc(links.phone)}</a></li>` : ''}
           <li><a href="${links.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn ${icon('arrow')}</a></li>
           <li><a href="${links.github}" target="_blank" rel="noopener noreferrer">GitHub ${icon('arrow')}</a></li>
           <li><a href="${links.cv}" download>CV (PDF) ${icon('down')}</a></li>
@@ -461,7 +468,8 @@ function setupCopy() {
  * A generation counter cancels the old loop when the language changes.
  */
 
-const STAGE_FOR_LINE = [0, 0, 1, 1, 2, 3, 3, 4];
+// Which pipeline stage each log line belongs to (infra, train, eval, deploy, monitor).
+const STAGE_FOR_LINE = [0, 0, 1, 1, 2, 2, 3, 3, 4];
 let termGen = 0;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -473,7 +481,7 @@ async function runTerminal(hero) {
 
   const lineHtml = (txt) => {
     const isCmd = txt.startsWith('$');
-    const cls = isCmd ? 'cmd' : /✓|healthy|none|complete/.test(txt) ? 'ok' : 'out';
+    const cls = isCmd ? 'cmd' : /✓|healthy|none|complete|PASS|watching/.test(txt) ? 'ok' : 'out';
     return `<span class="ln ${cls}">${esc(txt)}</span>`;
   };
 
